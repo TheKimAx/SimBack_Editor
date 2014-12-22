@@ -20,22 +20,6 @@ public class ImportXml extends DefaultHandler {
 
 	private SAXParser saxParser = null;
 	
-	/**
-	 * Attribut permettant de déterminer la nature de l'élément courant en cours de traitement 
-	 * 		Valeurs possibles :
-	 * 			0		->		INDERTERMINE
-	 * 			1 		->		CONTACT
-	 * 			2		->		FULLNAME
-	 * 			3		->		PHONE
-	 */
-	private enum ElementType {
-		INDERTERMINE,
-		CONTACT,
-		FULLNAME,
-		PHONE
-	}
-	private ElementType curEltType = ElementType.INDERTERMINE;
-	
 	private Customer curClient = null;
 	private Contact curContact = null;
 	private String content = null;
@@ -57,19 +41,16 @@ public class ImportXml extends DefaultHandler {
 			String qName, Attributes attribute) throws SAXException  {
 		switch (qName) {
 		case "contact":
-			curEltType = ElementType.CONTACT; 
 			curContact = new Contact();
 			curContact.setOwnerContact(curClient);
 			System.out.println("ImportXml.startElement() : case CONTACT");
 			break;
 			
 		case "fullname":
-			curEltType = ElementType.FULLNAME;
 			System.out.println("ImportXml.startElement() : case FULLNAME");
 			break;
 
 		case "phone":
-			curEltType = ElementType.PHONE;
 			System.out.println("ImportXml.endElement() : case PHONE");
 			break;
 		default:
@@ -90,7 +71,6 @@ public class ImportXml extends DefaultHandler {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				curEltType = ElementType.INDERTERMINE;
 			}
 			break;
 			
@@ -101,7 +81,6 @@ public class ImportXml extends DefaultHandler {
 				curContact.setOwnerContact(curClient);
 			}
 			curContact.setFullnameContact(content);
-			curEltType = ElementType.CONTACT; 
 			break;
 
 		case "phone":
@@ -111,7 +90,6 @@ public class ImportXml extends DefaultHandler {
 				curContact.setOwnerContact(curClient);
 			}
 			curContact.setTelContact(content);
-			curEltType = ElementType.CONTACT; 
 			break;
 			
 		default:

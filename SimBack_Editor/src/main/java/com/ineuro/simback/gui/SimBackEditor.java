@@ -41,7 +41,10 @@ import org.xml.sax.SAXException;
 import com.ineuro.simback.dao.SimBackDao;
 import com.ineuro.simback.model.Contact;
 import com.ineuro.simback.model.Customer;
+import com.ineuro.simback.process.ImportVCard;
 import com.ineuro.simback.process.ImportXml;
+
+import ezvcard.VCardException;
 
 @SuppressWarnings("serial")
 public class SimBackEditor extends JFrame implements ActionListener, ListSelectionListener {
@@ -510,7 +513,22 @@ public class SimBackEditor extends JFrame implements ActionListener, ListSelecti
 				fileDlg.setVisible(true);
 				files = fileDlg.getFiles();
 				if(0 < files.length) {
-					//	TODO	Traitement de l'export du fichier XML
+					System.out.println("SimBackEditor.actionPerformed() Fichier sélectionné : " + files[0].getAbsolutePath());
+					try {
+						ImportVCard.setCurClient(curClient);
+						ImportVCard.parseFile(files[0].getAbsolutePath());
+						loadCurContacts();
+					} catch (VCardException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				break;
 			
