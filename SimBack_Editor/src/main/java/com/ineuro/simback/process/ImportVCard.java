@@ -38,6 +38,7 @@ public class ImportVCard {
 			SimBackDao.createContact(aContact);
 		}
 		
+		vcr.close();
 		return lsContacts;
 	}
 
