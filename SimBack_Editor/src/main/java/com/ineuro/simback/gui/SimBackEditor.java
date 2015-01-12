@@ -2,6 +2,7 @@ package com.ineuro.simback.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
@@ -11,12 +12,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -35,12 +39,17 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import org.xml.sax.SAXException;
 
 import com.ineuro.simback.dao.SimBackDao;
 import com.ineuro.simback.model.Contact;
 import com.ineuro.simback.model.Customer;
+import com.ineuro.simback.process.ExportVCard;
+import com.ineuro.simback.process.ExportXml;
 import com.ineuro.simback.process.ImportVCard;
 import com.ineuro.simback.process.ImportXml;
 
@@ -436,6 +445,7 @@ public class SimBackEditor extends JFrame implements ActionListener, ListSelecti
 		if(src instanceof JMenuItem) {
 			JMenuItem menu = (JMenuItem) src;
 			FileDialog fileDlg;
+			JFileChooser fileChooser;
 			
 			System.out.println("SimBackEditor.actionPerformed() Menu sélectionné : " + menu.getText());
 			switch(menu.getActionCommand()) {
@@ -533,22 +543,57 @@ public class SimBackEditor extends JFrame implements ActionListener, ListSelecti
 				break;
 			
 			case "ExportXML":
-				fileDlg = new FileDialog(this, "SimBack Editor - Import d'un fichier XML", FileDialog.LOAD);
-				fileDlg.setDirectory("%HOMEPATH%");
-				fileDlg.setVisible(true);
-				files = fileDlg.getFiles();
-				if(0 < files.length) {
-					//	TODO	Traitement de l'export du fichier vCard
+				String fileName = "SimBack_" + curClient.getNomCust() + "_" + curClient.getTelCust() + "_" + getCurDateStamp() + ".xml";
+				
+				fileChooser = new JFileChooser();
+				fileChooser.setCurrentDirectory( new File("%HOMEPATH%") );
+				fileChooser.setDialogTitle("SimBack Editor - Export des contacts au format XML : Choix du répertoire de destination");
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				int result = fileChooser.showOpenDialog(this);
+				if(JFileChooser.APPROVE_OPTION == result) {
+					String dirPath = fileChooser.getSelectedFile().getAbsolutePath();
+					System.out.println("SimBackEditor.actionPerformed() Répertoire : " + dirPath);
+					System.out.println("SimBackEditor.actionPerformed() Nom du fichier [Before Transform] : " + fileName);
+					fileName = dirPath + "\\" + fileName;
+					System.out.println("SimBackEditor.actionPerformed() Nom du fichier [After Transform] : " + fileName);
+					
+					try {
+						ExportXml.saveContactsToXmlFile(fileName, lsContacts, curClient);
+						Desktop.getDesktop().open(new File(dirPath));
+					} catch (ParserConfigurationException
+							| TransformerFactoryConfigurationError
+							| TransformerException
+							| IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				break;
 			
 			case "ExportVCard":
-				fileDlg = new FileDialog(this, "SimBack Editor - Import d'un fichier vCard", FileDialog.LOAD);
-				fileDlg.setDirectory("%HOMEPATH%");
-				fileDlg.setVisible(true);
-				files = fileDlg.getFiles();
-				if(0 < files.length) {
-					//	TODO	Traitement de l'import du fichier vCard
+				fileName = "SimBack_" + curClient.getNomCust() + "_" + curClient.getTelCust() + "_" + getCurDateStamp() + ".vcf";
+				
+				fileChooser = new JFileChooser();
+				fileChooser.setCurrentDirectory( new File("%HOMEPATH%") );
+				fileChooser.setDialogTitle("SimBack Editor - Export des contacts au format vCard : Choix du répertoire de destination");
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				result = fileChooser.showOpenDialog(this);
+				if(JFileChooser.APPROVE_OPTION == result) {
+					String dirPath = fileChooser.getSelectedFile().getAbsolutePath();
+					System.out.println("SimBackEditor.actionPerformed() Répertoire : " + dirPath);
+					System.out.println("SimBackEditor.actionPerformed() Nom du fichier [Before Transform] : " + fileName);
+					fileName = dirPath + "\\" + fileName;
+					System.out.println("SimBackEditor.actionPerformed() Nom du fichier [After Transform] : " + fileName);
+					
+					// TODO Appel de la méthode de sauvegarde des contacts au format XML
+					try {
+						ExportVCard.saveContactsToVcardFile(fileName, lsContacts);
+						Desktop.getDesktop().open(new File(dirPath));
+					} catch (IOException | VCardException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				break;
 			
@@ -573,6 +618,11 @@ public class SimBackEditor extends JFrame implements ActionListener, ListSelecti
 		boolean status = table.getSelectedRow()!=-1;
 		mntmEditContact.setEnabled(status);
 		mntmSupprContact.setEnabled(status);
+	}
+	
+	private String getCurDateStamp() {
+		SimpleDateFormat simpleDf = new SimpleDateFormat("ddMMyyyy_hhmmss");
+		return simpleDf.format(new Date());
 	}
 
 }
