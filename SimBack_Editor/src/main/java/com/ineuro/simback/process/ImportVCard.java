@@ -31,6 +31,7 @@ public class ImportVCard {
 			aContact.setOwnerContact(curClient);
 			aContact.setFullnameContact((aVCard.getFormattedNames().size() == 0) ? "" : aVCard.getFormattedName().getValue());
 			aContact.setTelContact((aVCard.getTelephoneNumbers().size() == 0) ? "" : aVCard.getTelephoneNumbers().get(0).getValue());
+			aContact.setTelContact( aContact.getTelContact().replaceAll("-", "") );
 			System.out.println("ImportVCard.parseFile() Contact Trouvé " + ++i +" : "
 					+ aContact.getFullnameContact() + " - "
 					+ aContact.getTelContact() );
