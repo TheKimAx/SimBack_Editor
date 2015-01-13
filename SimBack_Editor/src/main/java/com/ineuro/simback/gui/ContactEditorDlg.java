@@ -145,8 +145,8 @@ public class ContactEditorDlg extends JDialog implements ActionListener {
 
 	public void setCurContact(Contact curContact) {
 		this.curContact = curContact;
-		tfNoms.setText(curContact.getFullnameContact());
-		tfPhone.setText(curContact.getTelContact());
+		tfNoms.setText(null==curContact ? "" : curContact.getFullnameContact());
+		tfPhone.setText(null==curContact ? "" : curContact.getTelContact());
 	}
 
 	public void saveContact() {

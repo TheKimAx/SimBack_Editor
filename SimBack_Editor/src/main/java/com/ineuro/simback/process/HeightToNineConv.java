@@ -61,7 +61,14 @@ public class HeightToNineConv {
 				/* Détermination du chiffre à ajouter */
 				switch (start) {
 				case '2':
+//					newStart = '2';
+//					break;
+					
+				case '3':
 					newStart = '2';
+					destNum = prefix
+							.concat(newStart=='u' ? "" : "24")
+							.concat(workNum.substring(1));
 					break;
 
 				case '5':
@@ -70,11 +77,14 @@ public class HeightToNineConv {
 
 				case '9':
 					newStart = '6';
+					destNum = prefix
+							.concat(newStart=='u' ? "" : "" + newStart)
+							.concat(workNum);
 					break;
 				}
-				destNum = prefix
-						.concat(newStart=='u' ? "" : "" + newStart)
-						.concat(workNum);
+//				destNum = prefix
+//						.concat(newStart=='u' ? "" : "" + newStart)
+//						.concat(workNum);
 			} else
 				destNum = origNum.substring(0);
 		} else
@@ -89,6 +99,7 @@ public class HeightToNineConv {
 		 *  the migration to Nine Numbers System */
 		String[] sampleNumbers = {
 				"24512486",
+				"33102236",
 				"+23726531584",
 				"915",				// Expected Result	:	"915"
 				"+24548756",		// Expected Result	:	"+24548756"

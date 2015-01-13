@@ -426,8 +426,10 @@ public class SimBackEditor extends JFrame implements ActionListener, ListSelecti
 				}
 				/* Change in current window the current client */
 				curClient = dlgChgCustomer.getSelectedClient();
+				/* Load informations about new current client and then his directory  */
+				loadCurClient();
 				/* Load the repertory of the new current client */
-				loadCurContacts();
+//				loadCurContacts();
 			}
 	}
 	
@@ -595,6 +597,14 @@ public class SimBackEditor extends JFrame implements ActionListener, ListSelecti
 						e.printStackTrace();
 					}
 				}
+				break;
+				
+			case "ConvToNine":
+				Conv8To9Dlg dlgConv8To9 = new Conv8To9Dlg();
+				dlgConv8To9.setMapContact(mapContacts);
+				dlgConv8To9.setModal(true);
+				dlgConv8To9.setVisible(true);
+				loadCurContacts();
 				break;
 			
 			case "About":
