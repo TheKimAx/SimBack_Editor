@@ -21,6 +21,13 @@ public class Customer {
 	@DatabaseField(canBeNull = false)
 	private String telCust;
 
+	@DatabaseField(canBeNull = false)
+	private String noCni;
+	
+	@DatabaseField(canBeNull = true)
+	private String emailCust;
+	
+	@SuppressWarnings("unused")
 	private static SimpleDateFormat df;
 	
 	static {
@@ -103,6 +110,22 @@ public class Customer {
 
 	public boolean isDefault() {
 		return isDefault;
+	}
+
+	public String getNoCni() {
+		return noCni;
+	}
+
+	public void setNoCni(String noCni) {
+		this.noCni = noCni;
+	}
+
+	public String getEmailCust() {
+		return emailCust;
+	}
+
+	public void setEmailCust(String emailCust) {
+		this.emailCust = emailCust;
 	}
 
 	public void setDefault(boolean isDefault) {

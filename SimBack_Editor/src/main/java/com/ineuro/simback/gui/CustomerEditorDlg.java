@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Date;
+import javax.swing.SwingConstants;
 
 public class CustomerEditorDlg extends JDialog implements ActionListener {
 
@@ -42,6 +43,8 @@ public class CustomerEditorDlg extends JDialog implements ActionListener {
 	private JTextField tfNomCust;
 	private JTextField tfPrenomCust;
 	private JTextField tfTelCust;
+	private JTextField tfNumCNI;
+	private JTextField tfEmail;
 
 	/**
 	 * Launch the application.
@@ -62,7 +65,7 @@ public class CustomerEditorDlg extends JDialog implements ActionListener {
 	public CustomerEditorDlg() {
 		setTitle("SIMBack Editor : Création d'un Client");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CustomerEditorDlg.class.getResource("/com/ineuro/simback/resources/LogoSimBack.png")));
-		setBounds(100, 100, 450, 215);
+		setBounds(100, 100, 450, 325);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -72,6 +75,14 @@ public class CustomerEditorDlg extends JDialog implements ActionListener {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -104,6 +115,7 @@ public class CustomerEditorDlg extends JDialog implements ActionListener {
 		}
 		{
 			JLabel lblNumroDeTlphone = new JLabel("Numéro de Téléphone *:");
+			lblNumroDeTlphone.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblNumroDeTlphone.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			contentPanel.add(lblNumroDeTlphone, "2, 10, right, default");
 		}
@@ -111,6 +123,27 @@ public class CustomerEditorDlg extends JDialog implements ActionListener {
 			tfTelCust = new JTextField();
 			contentPanel.add(tfTelCust, "4, 10, fill, default");
 			tfTelCust.setColumns(10);
+		}
+		{
+			JLabel lblNumroCni = new JLabel("Numéro CNI *:");
+			lblNumroCni.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			contentPanel.add(lblNumroCni, "2, 14, right, default");
+		}
+		{
+			tfNumCNI = new JTextField();
+			tfNumCNI.setColumns(10);
+			contentPanel.add(tfNumCNI, "4, 14, fill, default");
+		}
+		{
+			JLabel lblAdresseEmail = new JLabel("Adresse E-Mail *:");
+			lblAdresseEmail.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblAdresseEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			contentPanel.add(lblAdresseEmail, "2, 18, right, default");
+		}
+		{
+			tfEmail = new JTextField();
+			tfEmail.setColumns(10);
+			contentPanel.add(tfEmail, "4, 18, fill, default");
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -160,6 +193,8 @@ public class CustomerEditorDlg extends JDialog implements ActionListener {
 			tfNomCust.setText(curClient.getNomCust());
 			tfPrenomCust.setText(curClient.getPrenomCust());
 			tfTelCust.setText(curClient.getTelCust());
+			tfNumCNI.setText(curClient.getNoCni());
+			tfEmail.setText(curClient.getEmailCust());
 		}
 	}
 
@@ -178,6 +213,8 @@ public class CustomerEditorDlg extends JDialog implements ActionListener {
 							curClient.setNomCust(tfNomCust.getText());
 							curClient.setPrenomCust(tfPrenomCust.getText());
 							curClient.setTelCust(tfTelCust.getText());
+							curClient.setNoCni(tfNumCNI.getText());
+							curClient.setEmailCust(tfEmail.getText());
 							
 							try {
 								SimBackDao.modifyCustomer(curClient);
@@ -202,6 +239,8 @@ public class CustomerEditorDlg extends JDialog implements ActionListener {
 						curClient.setNomCust(tfNomCust.getText());
 						curClient.setPrenomCust(tfPrenomCust.getText());
 						curClient.setTelCust(tfTelCust.getText());
+						curClient.setNoCni(tfNumCNI.getText());
+						curClient.setEmailCust(tfEmail.getText());
 						Date aujourdhui = new Date();
 						curClient.setInscrCust(aujourdhui);
 						curClient.setLastSubscription(aujourdhui);
