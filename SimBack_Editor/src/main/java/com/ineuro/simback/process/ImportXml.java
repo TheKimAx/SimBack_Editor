@@ -53,6 +53,14 @@ public class ImportXml extends DefaultHandler {
 		case "phone":
 			System.out.println("ImportXml.endElement() : case PHONE");
 			break;
+			
+		case "email":
+			System.out.println("ImportXml.endElement() : case EMAIL");
+			break;
+			
+		case "cni":
+			System.out.println("ImportXml.endElement() : case CNI");
+			break;
 		default:
 			break;
 		}
@@ -91,7 +99,7 @@ public class ImportXml extends DefaultHandler {
 			}
 			curContact.setTelContact(content);
 			break;
-			
+
 		default:
 			break;
 		}

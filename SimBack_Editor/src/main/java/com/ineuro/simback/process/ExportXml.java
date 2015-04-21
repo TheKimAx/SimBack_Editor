@@ -64,17 +64,17 @@ public class ExportXml {
 		child.appendChild(curDoc.createTextNode(curClient.getPrenomCust()));
 		eltCust.appendChild(child);
 		
-//		child = curDoc.createElement("email");
-//		child.appendChild(curDoc.createTextNode(curClient.get));
-//		eltCust.appendChild(child);
+		child = curDoc.createElement("email");
+		child.appendChild(curDoc.createTextNode(curClient.getEmailCust()));
+		eltCust.appendChild(child);
 		
 		child = curDoc.createElement("telephone");
 		child.appendChild(curDoc.createTextNode(curClient.getTelCust()));
 		eltCust.appendChild(child);
 		
-//		child = curDoc.createElement("cni");
-//		child.appendChild(curDoc.createTextNode(curClient.get()));
-//		eltCust.appendChild(child);
+		child = curDoc.createElement("cni");
+		child.appendChild(curDoc.createTextNode(curClient.getNoCni()));
+		eltCust.appendChild(child);
 		
 		return eltCust;
 	}
