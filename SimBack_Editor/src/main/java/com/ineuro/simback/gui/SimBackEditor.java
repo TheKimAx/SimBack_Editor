@@ -522,25 +522,29 @@ public class SimBackEditor extends JFrame implements ActionListener, ListSelecti
 			case "ImportVCard":
 				fileDlg = new FileDialog(this, "SimBack Editor - Import d'un fichier vCard", FileDialog.LOAD);
 				fileDlg.setDirectory("%HOMEPATH%");
+				fileDlg.setMultipleMode(true);
 				fileDlg.setVisible(true);
 				files = fileDlg.getFiles();
 				if(0 < files.length) {
-					System.out.println("SimBackEditor.actionPerformed() Fichier sélectionné : " + files[0].getAbsolutePath());
-					try {
-						ImportVCard.setCurClient(curClient);
-						ImportVCard.parseFile(files[0].getAbsolutePath());
-						loadCurContacts();
-					} catch (VCardException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					/* Traitement des différents fichiers VCF */
+					for(int i = 0; i < files.length; i++) {
+						System.out.println("SimBackEditor.actionPerformed() Fichier sélectionné : " + files[i].getAbsolutePath());
+						try {
+							ImportVCard.setCurClient(curClient);
+							ImportVCard.parseFile(files[i].getAbsolutePath());
+						} catch (VCardException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
-					catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					loadCurContacts();
 				}
 				break;
 			
